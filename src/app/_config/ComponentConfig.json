@@ -1,0 +1,56 @@
+{
+  "pages":[
+    {
+      "id":"page-1",
+      "pageNumber": 1,
+      "title":"Page 1",
+      "components":[
+        {
+          "id":"credentials-form",
+          "type":"CredentialsForm",
+          "props":{
+            
+          }
+        }
+      ]
+    },
+    {
+      "id":"page-2",
+      "pageNumber": 2,
+      "title":"Page 2",
+      "components":[
+        {
+          "id":"about-me-form",
+          "type":"AboutMe",
+          "name": "About Me",
+          "props":{
+            
+          }
+        },
+        {
+          "id":"birthday-form",
+          "type":"BirthdayForm",
+          "name": "Date Of Birth",
+          "props":{
+            
+          }
+        }
+      ]
+    },
+    {
+      "id":"page-3",
+      "pageNumber": 3,
+      "title":"Page 3",
+      "components":[
+        {
+          "id":"address-form",
+          "type":"AddressForm",
+          "name:": "Address",
+          "props":{
+            
+          }
+        }
+      ]
+    }
+  ]
+}
