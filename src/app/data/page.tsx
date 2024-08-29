@@ -8,7 +8,7 @@ const fields = {
   street_1: 'Street 1',
   street_2: 'Street 2',
   city: 'City',
-  State: 'State',
+  state: 'State',
   zipcode: 'Zipcode'
 }
 
