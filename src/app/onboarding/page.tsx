@@ -3,26 +3,14 @@ import ComponentRegistry from '@/libs/ComponentRegistry'
 import ComponentConfig from '@/config/ComponentConfig.json'
 import SubmitButton from '@/components/SubmitButton'
 import { useState, useEffect } from 'react'
-
-type Component = {
-  id: string
-  type: keyof ComponentRegistry
-  props: any
-}
-
-type PageComponent = {
-  id: string
-  pageNumber: number
-  title: string
-  components: Component[]
-}
+import { Component, PageComponent } from '@/app/types'
 
 const renderComponent = (component: Component) => {
   const PageComponent = ComponentRegistry[component.type]
   return PageComponent ? <PageComponent key={component.id} {...component.props} /> : null
 }
 
-const MAX_PAGES = ComponentConfig.pages.length
+const MAX_PAGES: number = ComponentConfig.pages.length
 
 export default function OnboardingPage() {
   const [pageNumber, setPageNumber] = useState<number>(1)
@@ -40,8 +28,8 @@ export default function OnboardingPage() {
         setPageComponents(fetechedResults)
         setCurrentPageComponents(fetechedResults[pageNumber - 1])
       } catch {
-        setPageComponents(ComponentConfig.pages)
-        setCurrentPageComponents(ComponentConfig.pages[pageNumber - 1])
+        setPageComponents(ComponentConfig.pages as PageComponent[])
+        setCurrentPageComponents(ComponentConfig.pages[pageNumber - 1] as PageComponent)
       }
     }
     getInitComponentConfigData()
@@ -75,6 +63,7 @@ export default function OnboardingPage() {
         setPageNumber((prev) => {
           const newPageNumber = prev < MAX_PAGES ? prev + 1 : 1
           setCurrentPageComponents(pageComponents?.[newPageNumber - 1])
+
           return newPageNumber
         })
         console.log('User added:', result)

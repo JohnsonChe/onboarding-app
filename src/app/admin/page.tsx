@@ -2,18 +2,19 @@
 import React, { useState } from 'react'
 import ComponentConfig from '@/config/ComponentConfig.json'
 import SubmitButton from '@/components/SubmitButton'
+import { Component, PageComponents, PageConfig } from '@/app/types'
 
-const componentsList = [
+const componentsList: Component[] = [
   { id: 'birthday-form', type: 'BirthdayForm', name: 'Birthdate' },
   { id: 'about-me-form', type: 'AboutMe', name: 'About Me' },
   { id: 'address-form', type: 'AddressForm', name: 'Address' }
 ]
 
 export default function AdminComponentManager() {
-  const [pageComponents, setPageComponents] = useState({
-    page1: [...ComponentConfig.pages[0].components],
-    page2: [...ComponentConfig.pages[1].components],
-    page3: [...ComponentConfig.pages[2].components]
+  const [pageComponents, setPageComponents] = useState<PageComponents>({
+    page1: [...ComponentConfig.pages[0].components] as Component[],
+    page2: [...ComponentConfig.pages[1].components] as Component[],
+    page3: [...ComponentConfig.pages[2].components] as Component[]
   })
 
   const getComponentPage = (componentId: string) => {
@@ -23,14 +24,14 @@ export default function AdminComponentManager() {
     return ''
   }
 
-  const handleSelectChange = (component, targetPage) => {
-    setPageComponents((prevPages) => {
+  const handleSelectChange = (component: Component, targetPage: keyof PageComponents) => {
+    setPageComponents((prevPages: PageComponents) => {
       const updatedPages = Object.fromEntries(
         Object.entries(prevPages).map(([key, components]) => [
           key,
           components.filter((field) => field.id !== component.id)
         ])
-      )
+      ) as PageComponents
 
       if (targetPage) {
         updatedPages[targetPage].push(component)
@@ -40,7 +41,7 @@ export default function AdminComponentManager() {
     })
   }
 
-  const validateAndSubmit = (e) => {
+  const validateAndSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     const { page2, page3 } = pageComponents
     if (page2.length === 0 || page3.length === 0) {
@@ -51,7 +52,7 @@ export default function AdminComponentManager() {
   }
 
   const generateNewJSON = () => {
-    const newJsonConfig = ComponentConfig
+    const newJsonConfig = { ...ComponentConfig } as PageConfig
     Object.entries(pageComponents).forEach((page, index) => {
       const [_, pageComponentArray] = page
       newJsonConfig.pages[index].components = pageComponentArray
@@ -59,7 +60,7 @@ export default function AdminComponentManager() {
     return newJsonConfig
   }
 
-  const updateConfig = async (jsonConfig) => {
+  const updateConfig = async (jsonConfig: PageConfig) => {
     const response = await fetch('/api/onboarding-form', {
       method: 'POST',
       headers: {
@@ -91,7 +92,9 @@ export default function AdminComponentManager() {
               id={`select-${component.id}`}
               value={getComponentPage(component.id)}
               className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5'
-              onChange={(e) => handleSelectChange(component, e.target.value)}>
+              onChange={(e) =>
+                handleSelectChange(component, e.target.value as keyof PageComponents)
+              }>
               <option value=''>Select Page</option>
               <option value='page1'>Page 1</option>
               <option value='page2'>Page 2</option>
